@@ -5,6 +5,7 @@ import {
   ListView, Text,
   StyleSheet
 } from 'react-native';
+import { BookRow } from './BookRow';
 
 export const Books = React.createClass({
   render: function() {
@@ -12,7 +13,7 @@ export const Books = React.createClass({
       books
     } = this.props;
     var ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
+      rowHasChanged: (r1, r2) => r1.id !== r2.id
     });
     var dataSource = ds.cloneWithRows(books);
     var styles = StyleSheet.create({
@@ -23,7 +24,7 @@ export const Books = React.createClass({
     return (
       <ListView
         dataSource={dataSource}
-        renderRow={(rowData) => <Text>{rowData}</Text>}
+        renderRow={(book) => <BookRow book={book} /> }
         style={styles.bookList}
       />
     );
@@ -32,7 +33,10 @@ export const Books = React.createClass({
 
 function mapStateToProps(state, props) {
   return {
-    books: ['bla']
+    books: [{
+      id: Math.random(),
+      title: "Something"
+    }]
   };
 }
 
