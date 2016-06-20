@@ -1,3 +1,10 @@
+export function openBook(book) {
+  return {
+    type: "OPEN_BOOK",
+    bookId: book.id
+  }
+}
+
 export function zoomIn() {
   return {
     meta: { remote: true },

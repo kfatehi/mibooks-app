@@ -10,7 +10,8 @@ import { BookRow } from './BookRow';
 export const Books = React.createClass({
   render: function() {
     const {
-      books
+      books,
+      openBook
     } = this.props;
     var ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1.id !== r2.id
@@ -24,7 +25,10 @@ export const Books = React.createClass({
     return (
       <ListView
         dataSource={dataSource}
-        renderRow={(book) => <BookRow book={book} /> }
+        renderRow={(book) => <BookRow
+          book={book}
+          onPress={() => { openBook(book)}}
+        /> }
         style={styles.bookList}
       />
     );
