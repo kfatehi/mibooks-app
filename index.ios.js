@@ -14,7 +14,7 @@ import {
 import { Provider } from 'react-redux';
 import store from './src/store';
 import { fetchBooks } from './src/api-client';
-import { getLocalBooks } from './src/storage';
+import { getLocalBooks, setLocalBooks } from './src/storage';
 import RNFS from 'react-native-fs';
 import { Router, Scene } from 'react-native-router-flux';
 import PageOne from './PageOne';
@@ -38,10 +38,11 @@ class MiBooksApp extends Component {
 AppRegistry.registerComponent('MiBooksApp', () => MiBooksApp);
 
 store.subscribe(function() {
-  console.log('state change', store.getState());
+  setLocalBooks(store.getState().books.listById);
 });
 
 getLocalBooks().then(function(books) {
+  console.log('getlocalbooks:', books);
   store.dispatch({ type: "UPDATE_BOOKS", local: books })
   fetchBooks().then(function(books) {
     store.dispatch({ type: "UPDATE_BOOKS", remote: books })

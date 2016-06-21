@@ -29,7 +29,8 @@ export const Books = React.createClass({
     const {
       books,
       booksById,
-      downloadingBook
+      bookDownloadStarted,
+      bookDownloadFinished
     } = this.props;
     var ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1.id !== r2.id
@@ -39,17 +40,16 @@ export const Books = React.createClass({
       var book = booksById[id];
       console.log('press book', book.id);
       if (book.local) { 
-        Actions.pageTwo();
+        Actions.pageTwo({ book });
+      } else if (book.downloading) {
+        console.log('already downloading!');
       } else {
-        downloadingBook(id)
-        console.log('ok i must dl it', book.path);
-        return;
-        // dispatch that we are downloading to display it and prevent double-invoke
+        bookDownloadStarted(id)
         downloadBook(book).then(function(res) {
-          console.log(`downloaded file to ${res}`);
+          bookDownloadFinished(id, res)
         }).catch(function(err) {
           console.log(err.stack);
-          // dispatch that it failed, reset, allow retry
+          bookDownloadFailed(id, err)
         })
       }
     }

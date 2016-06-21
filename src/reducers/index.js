@@ -18,14 +18,27 @@ export function books(state = INITIAL_STATE, action) {
         listById: keyBy(local, 'id')
       }
     } else if (remote) {
-      var keyedLocalBooks = keyBy(local, 'id');
       var newList = remote.map(function({ id, title, author, page, scale, path, filename }) {
-        var localBook = keyedLocalBooks[id];
-        if (localBook) {
-          var maxPage = max(page, localBook.page);
-          return { id, title, author, page: maxPage, scale: localBook.scale, local: true, filename }
+        var book = state.listById[id];
+        if (book && book.local) {
+          return {
+            id, title, author,
+            page: max(page, book.page),
+            scale: book.scale,
+            downloading: false,
+            local: true,
+            localPath: book.localPath,
+            filename
+          }
         } else {
-          return { id, title, author, page, scale, local: false, path, filename }
+          return {
+            id, title, author, page, scale,
+            downloading: false,
+            local: false,
+            localPath: null,
+            remotePath: path,
+            filename
+          }
         }
       })
       return {
@@ -44,11 +57,42 @@ export function books(state = INITIAL_STATE, action) {
     }
   }
 
+  function finalizeBookDownloadSuccess(id, localPath) {
+    return {
+      list: state.list,
+      listById: Object.assign({}, state.listById, {
+        [id]: Object.assign({}, state.listById[id], {
+          downloading: null,
+          local: true,
+          localPath: localPath
+        })
+      })
+    }
+  }
+
+  function finalizeBookDownloadError(id, err) {
+    return {
+      list: state.list,
+      listById: Object.assign({}, state.listById, {
+        [id]: Object.assign({}, state.listById[id], {
+          downloading: false,
+          local: false,
+          path: null,
+          error: err.message
+        })
+      })
+    }
+  }
+
   switch (action.type) {
     case 'UPDATE_BOOKS':
-      return updateList(action)
+      return updateList(action);
     case 'DOWNLOADING_BOOK':
-      return updateListItemAttribute(action.id, 'downloading', true)
+      return updateListItemAttribute(action.id, 'downloading', true);
+    case 'DOWNLOADING_BOOK_DONE':
+      return finalizeBookDownloadSuccess(action.id, action.localPath);
+    case 'DOWNLOADING_BOOK_FAIL':
+      return finalizeBookDownloadError(action.id, action.err);
   }
   return state;
 }

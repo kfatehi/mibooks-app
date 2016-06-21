@@ -26,8 +26,20 @@ export function prevPage() {
   }
 }
 
-export function downloadingBook(id) {
+export function bookDownloadStarted(id) {
   return { 
     type: "DOWNLOADING_BOOK", id
+  }
+}
+
+export function bookDownloadFinished(id, localPath) {
+  return { 
+    type: "DOWNLOADING_BOOK_DONE", id, localPath
+  }
+}
+
+export function bookDownloadFailed(id, err) {
+  return { 
+    type: "DOWNLOADING_BOOK_FAIL", id, err
   }
 }

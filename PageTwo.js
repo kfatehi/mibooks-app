@@ -5,17 +5,15 @@ import PDFView from 'react-native-pdf-view';
 
 export default class PageTwo extends Component {
   render() {
+    const { localPath, scale, page } = this.props.book;
     return (
-      <View>
-        <PDFView ref={(pdf)=>{this.pdfView = pdf;}}
-          src={"sdcard/pdffile.pdf"}
-          onLoadComplete = {(pageCount)=>{
-            this.pdfView.setNativeProps({
-              zoom: 1.5
-            });
-          }}
-          style={{flex:1}}/>
-      </View>
+      <PDFView
+        path={localPath}
+        pageNumber={page}
+        zoom={scale}
+        onLoadComplete = {(pageCount)=>{
+          console.log('load complete', pageCount);
+        }}/>
     )
   }
 }
