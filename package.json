@@ -8,7 +8,9 @@
   "dependencies": {
     "react": "^15.1.0",
     "react-native": "0.27.2",
+    "react-native-fs": "^1.5.1",
     "react-native-pdf-view": "^0.3.2",
+    "react-native-router-flux": "^3.30.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2"
   }

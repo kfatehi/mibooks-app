@@ -12,31 +12,28 @@ import {
   View,
 } from 'react-native';
 import { Provider } from 'react-redux';
-import { BooksContainer } from './src/components/Books';
 import store from './src/store';
 import { fetchBooks } from './src/api-client';
 import { getLocalBooks } from './src/storage';
+import RNFS from 'react-native-fs';
+import { Router, Scene } from 'react-native-router-flux';
+import PageOne from './PageOne';
+import PageTwo from './PageTwo';
 
 class MiBooksApp extends Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          <BooksContainer />
-        </View>
+        <Router>
+          <Scene key="root">
+            <Scene key="pageOne" component={PageOne} title="PageOne" initial={true} />
+            <Scene key="pageTwo" component={PageTwo} title="PageTwo" />
+          </Scene>
+        </Router>
       </Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  }
-});
 
 AppRegistry.registerComponent('MiBooksApp', () => MiBooksApp);
 
@@ -54,4 +51,3 @@ getLocalBooks().then(function(books) {
 }).catch(function(err) {
   console.warn(err.message);
 });
-
