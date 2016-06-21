@@ -1,17 +1,3 @@
-export function openBook(book) {
-  return {
-    type: "OPEN_BOOK",
-    bookId: book.id
-  }
-}
-
-export function fetchBook(book) {
-  return {
-    type: "FETCH_BOOK",
-    bookId: book.id
-  }
-}
-
 export function zoomIn() {
   return {
     meta: { remote: true },
@@ -37,5 +23,11 @@ export function prevPage() {
   return {
     meta: { remote: true },
     type: "PREV_PAGE"
+  }
+}
+
+export function downloadingBook(id) {
+  return { 
+    type: "DOWNLOADING_BOOK", id
   }
 }
