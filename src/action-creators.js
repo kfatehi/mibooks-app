@@ -5,6 +5,13 @@ export function openBook(book) {
   }
 }
 
+export function fetchBook(book) {
+  return {
+    type: "FETCH_BOOK",
+    bookId: book.id
+  }
+}
+
 export function zoomIn() {
   return {
     meta: { remote: true },

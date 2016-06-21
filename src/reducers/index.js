@@ -19,9 +19,9 @@ export function books(state = INITIAL_STATE, action) {
         var localBook = keyedLocalBooks[id];
         if (localBook) {
           var maxPage = max(page, localBook.page);
-          return { id, title, author, page: maxPage, scale: localBook.scale }
+          return { id, title, author, page: maxPage, scale: localBook.scale, local: true }
         } else {
-          return { id, title, author, page: 0, scale: 1 }
+          return { id, title, author, page, scale, local: false}
         }
       })
       return { list: newList }

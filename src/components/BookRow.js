@@ -6,7 +6,10 @@ export class BookRow extends Component {
     const {
       book: {
         title,
-        author
+        author,
+        page,
+        scale,
+        local
       },
       onPress
     } = this.props;
@@ -15,6 +18,8 @@ export class BookRow extends Component {
         <View>
           <Text>Title: {title}</Text>
           <Text>Author: {author}</Text>
+          <Text>Page: {page}</Text>
+          <Text>{local ? 'Local' : 'Remote'}</Text>
         </View>
       </TouchableHighlight>
     )
