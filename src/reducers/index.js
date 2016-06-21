@@ -15,13 +15,13 @@ export function books(state = INITIAL_STATE, action) {
       return { list: local }
     } else if (remote) {
       var keyedLocalBooks = keyBy(local, 'id');
-      var newList = remote.map(function({ id, title, author, page, scale, path }) {
+      var newList = remote.map(function({ id, title, author, page, scale, path, filename }) {
         var localBook = keyedLocalBooks[id];
         if (localBook) {
           var maxPage = max(page, localBook.page);
-          return { id, title, author, page: maxPage, scale: localBook.scale, local: true }
+          return { id, title, author, page: maxPage, scale: localBook.scale, local: true, filename }
         } else {
-          return { id, title, author, page, scale, local: false, path }
+          return { id, title, author, page, scale, local: false, path, filename }
         }
       })
       return { list: newList }

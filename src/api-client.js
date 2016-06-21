@@ -5,3 +5,7 @@ export function fetchBooks() {
     return JSON.parse(resText).books;
   })
 }
+
+export function getBookURL(path) {
+  return 'http://192.168.1.58:3000'+path;
+}

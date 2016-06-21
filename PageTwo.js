@@ -6,9 +6,7 @@ import PDFView from 'react-native-pdf-view';
 export default class PageTwo extends Component {
   render() {
     return (
-      <View style={{margin: 128}}>
-        <Text>This is PageTwo!</Text>
-        <Text>{this.props.title}</Text>
+      <View>
         <PDFView ref={(pdf)=>{this.pdfView = pdf;}}
           src={"sdcard/pdffile.pdf"}
           onLoadComplete = {(pageCount)=>{

@@ -5,10 +5,11 @@ import {
   ListView,
   StyleSheet,
   View,
-  Text
+  Text,
+  TouchableHighlight
 } from 'react-native';
-import { BookRow } from './BookRow';
 import { Actions } from 'react-native-router-flux';
+import { downloadBook }  from '../core';
 
 export const Books = React.createClass({
   render: function() {
@@ -17,25 +18,37 @@ export const Books = React.createClass({
       rowHasChanged: (r1, r2) => r1.id !== r2.id
     });
     var dataSource = ds.cloneWithRows(books);
-    var styles = StyleSheet.create({
-      bookList: {
-        marginTop: 20,
-        flex: 1
-      },
-      pdf: {
-        flex: 1
+    var handlePress = book => () => {
+      console.log('press book', book.id);
+      if (book.local) { 
+        Actions.pageTwo();
+      } else {
+        console.log('ok i must dl it', book.path);
+        // dispatch that we are downloading to display it and prevent double-invoke
+        downloadBook(book).then(function(res) {
+          console.log(`downloaded file to ${res}`);
+        }).catch(function(err) {
+          console.log(err.stack);
+          // dispatch that it failed, reset, allow retry
+        })
       }
-    })
+    }
     return (
       <View>
         <ListView
           enableEmptySections={true}
+          style={{ marginTop: 20 }}
           dataSource={dataSource}
-          renderRow={(book) => <BookRow
-            book={book}
-            onPress={() => Actions.pageTwo(book) }
-          /> }
-          style={styles.bookList}
+          renderRow={book => {
+            return <TouchableHighlight onPress={handlePress(book)}>
+              <View>
+                <Text>Title: {book.title}</Text>
+                <Text>Author: {book.author}</Text>
+                <Text>{book.local ? 'Local' : 'Remote'}</Text>
+              </View>
+            </TouchableHighlight>
+            }
+          }
         />
       </View>
     );
