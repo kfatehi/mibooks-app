@@ -24,6 +24,7 @@ export const Books = React.createClass({
     })
     return (
       <ListView
+        enableEmptySections={true}
         dataSource={dataSource}
         renderRow={(book) => <BookRow
           book={book}
@@ -37,10 +38,7 @@ export const Books = React.createClass({
 
 function mapStateToProps(state, props) {
   return {
-    books: [{
-      id: Math.random(),
-      title: "Something"
-    }]
+    books: state.books.list
   };
 }
 

@@ -10,31 +10,12 @@ import {
   StyleSheet,
   Text,
   View,
-  AsyncStorage
 } from 'react-native';
 import { Provider } from 'react-redux';
 import { BooksContainer } from './src/components/Books';
 import store from './src/store';
-
-AsyncStorage.getItem('LOCAL_BOOKS').then(function(val) {
-  //store.dispatch({
-  //  type: "SET_LOCAL_BOOKS",
-  //  books: val
-  //})
-}).catch(function(err) {
-  console.log(err.message);
-});
-
-fetch('http://192.168.1.58:3000/books.json').then(res => res.text())
-.then(function(resText) {
-  var books = JSON.parse(resText).books;
-  console.log(books);
-  //store.dispatch({
-  //  type: "SET_REMOTE_BOOKS",
-  //})
-}).catch(function(err) {
-  console.log(err.message);
-});
+import { fetchBooks } from './src/api-client';
+import { getLocalBooks } from './src/storage';
 
 class MiBooksApp extends Component {
   render() {
@@ -58,3 +39,19 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('MiBooksApp', () => MiBooksApp);
+
+store.subscribe(function() {
+  console.log('state change', store.getState());
+});
+
+getLocalBooks().then(function(books) {
+  store.dispatch({ type: "UPDATE_BOOKS", local: books })
+  fetchBooks().then(function(books) {
+    store.dispatch({ type: "UPDATE_BOOKS", remote: books })
+  }).catch(function(err) {
+    console.log('failed to fetch', err.stack);
+  });
+}).catch(function(err) {
+  console.warn(err.message);
+});
+

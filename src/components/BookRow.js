@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
-import { Text, TouchableHighlight } from 'react-native';
+import { Text, View, TouchableHighlight } from 'react-native';
 
 export class BookRow extends Component {
   render() {
-    const { book: { title }, onPress } = this.props;
+    const {
+      book: {
+        title,
+        author
+      },
+      onPress
+    } = this.props;
     return (
       <TouchableHighlight onPress={onPress}>
-        <Text>{title}</Text>
+        <View>
+          <Text>Title: {title}</Text>
+          <Text>Author: {author}</Text>
+        </View>
       </TouchableHighlight>
     )
   }
